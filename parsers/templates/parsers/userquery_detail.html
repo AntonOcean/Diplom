@@ -1,0 +1,22 @@
+{% extends 'parsers/base.html' %}
+
+{% block content_title %}
+    {{  object.timestamp }}
+{% endblock %}
+
+{% block content %}
+{#    <br>#}
+    <h4>Выполненные запросы:</h4>
+    <ol>
+        <li><a href="{{ object.baseurlparser_set.first.url_cyberleninka }}">Cyberleninka</a></li>
+        <li><a href="{{ object.baseurlparser_set.first.url_scholar }}">Scholar</a></li>
+        <li><a href="{{ object.baseurlparser_set.first.url_socio }}">Socio</a></li>
+    </ol>
+    <br>
+    <h4>Загруженные документы:</h4>
+    <ul>
+        {% for doc in object.document_set.all %}
+            <li><a href="{{ doc.net_url }}">{{ doc.title }}</a></li>
+        {% endfor %}
+    </ul>
+{% endblock %}

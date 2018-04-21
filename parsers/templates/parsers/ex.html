@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<body>
+{% load staticfiles %}
+<script src="{% static "js/jquery-3.3.1.min.js" %}"></script>
+<div id="demo">
+<h1>The XMLHttpRequest Object</h1>
+<button type="button" onclick="loadDoc()">Change Content</button>
+</div>
+
+<script>
+function loadDoc() {
+  var xhttp = new XMLHttpRequest();
+  console.log('hi');
+  xhttp.onreadystatechange = function() {
+    if (this.readyState === 4 && this.status === 200) {
+      document.getElementById("demo").innerHTML =
+      this.responseText;
+    }
+  };
+  xhttp.open("GET", "/ajax_info", true);
+  xhttp.send();
+}
+</script>
+
+</body>
+</html>

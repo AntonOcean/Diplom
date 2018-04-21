@@ -1,0 +1,135 @@
+{% extends 'parsers/base.html'%}
+{% load staticfiles %}
+{% block title %}
+    Новый запрос
+{% endblock %}
+{% block content_title %}
+    <h3 id="title" class="text-lg-center">Тематический поиск научных материалов</h3>
+{% endblock %}
+{% block content %}
+    {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+<div id="form_query"><form action="{% url 'new_query' %}" method="POST">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="exampleInputAuthor">Автор</label>
+        <input type="text" class="form-control" id="exampleInputAuthor" placeholder="Иванов И. И." name="author" value="">
+    </div>
+
+    <div class="form-group">
+        <label for="exampleInputTitle">Название статьи</label>
+        <input type="text" class="form-control" id="exampleInputTitle" placeholder="Автоматизированные системы" name="title" value="">
+    </div>
+
+    <div class="form-group">
+        <label for="exampleInputKeyWords">Ключевые слова</label>
+        <input type="text" class="form-control" id="exampleInputKeyWords" placeholder="кибернетика тестирование" name="keywords" value="">
+    </div>
+
+{#    <div class="form-group">#}
+{#        <label for="exampleInputYear1">Год1</label>#}
+{#        <input type="text" class="form-control" id="exampleInputYear1" placeholder="2017" name="year1" value="">#}
+{#    </div>#}
+{##}
+{#    <div class="form-group">#}
+{#        <label for="exampleInputYear2">Год2</label>#}
+{#        <input type="text" class="form-control" id="exampleInputYear2" placeholder="2018" name="year2" value="">#}
+{#    </div>#}
+
+    <div>
+        <label for="exampleInputYear1">Показать статьи, датированные следующим <b>периодом</b>:</label>
+    </div>
+    <div class="form-group">
+        <div style="display: inline;">
+            <input name="year1" value="" id="exampleInputYear1" placeholder="2017" size="4" maxlength="4" pattern="[0-9]*" type="text">
+        </div>
+        <span style="display: inline;">&nbsp;—&nbsp;</span>
+        <div  style="display: inline;">
+            <input name="year2" value="" id="xampleInputYear2" placeholder="2018" size="4" maxlength="4" pattern="[0-9]*" type="text">
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary" >Найти</button>
+
+
+</form></div>
+{% endblock %}
+{% block javascript %}
+    <script>
+        function loadDoc() {
+            {#var xhttp = new XMLHttpRequest();#}
+            {#xhttp.onreadystatechange = function() {#}
+            {#  if (this.readyState === 4 && this.status === 200) {#}
+            {#    document.getElementById("form_query").innerHTML =#}
+            {#    this.responseText;#}
+            {#  }#}
+            {# };#}
+            {#xhttp.open("GET", "/load", true);#}
+            {#xhttp.send();#}
+
+            console.log('success');
+            $("#title").text ("Загрузка данных....");
+            $("#form_query").html ("<h4>" + "Пожалуйста подождите" + "</h4>")
+        }
+
+
+        {#var xhr = new window.XMLHttpRequest();#}
+        {#var request = $.post({#}
+        {#    type: $form.attr('method'),#}
+        {#    url: $form.attr('action'),#}
+        {#    beforeSend: loadDoc,#}
+        {#    data: $form.serialize(),#}
+        {#    xhr : function(){#}
+        {#        return xhr;#}
+        {#    }#}
+{#        {);#}
+{#        xhr.abort();#}
+
+
+        {#$(function() {#}
+        {#    $('form').submit(function(e) {#}
+        {#        var $form = $(this);#}
+        {#        var xhr = new window.XMLHttpRequest();#}
+        {#        var request = $.ajax({#}
+        {#            type: $form.attr('method'),#}
+        {#            url: $form.attr('action'),#}
+        {#            beforeSend: loadDoc,#}
+        {#            data: $form.serialize(),#}
+        {#            xhr : function(){#}
+        {#                return xhr;#}
+        {#            }#}
+        {#        });#}
+        {#        xhr.abort();#}
+        {#        //отмена действия по умолчанию для кнопки submit#}
+        {#        e.preventDefault();#}
+        {#    })#}
+{#        {);#}
+
+
+        $(function() {
+            $('form').submit(function (e) {
+                var $form = $(this);
+                $.ajax({
+                    type: $form.attr('method'),
+                    url: $form.attr('action'),
+                    beforeSend: loadDoc,
+                    data: $form.serialize()
+                }).before(function () {
+                    $("#form_query").hide();
+                }).done(function (data) {
+                    $("#title").text("Загрузка завершена");
+                    $("#form_query").html("<h4>" + data.message + "</h4>");
+                    document.location.href = data.url;
+                    console.log('success');
+                }).fail(function () {
+                    console.log('fail');
+                });
+                //отмена действия по умолчанию для кнопки submit
+                e.preventDefault();
+            })
+        });
+
+
+
+
+    </script>
+{% endblock %}
