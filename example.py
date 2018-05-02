@@ -1,6 +1,11 @@
-def func(a, b):
-    print(a, b)
+d = {
+    "timestamp": "21-04-27-1-12",
+    "author": "Иванов И. И.",
+    "title": "методы",
+    "keywords": "тег_тестовый",
+    "year1": "2000",
+    "year2": "2014"
+}
 
-d = [{'a': 1}, {'b': 2}]
-for i in d:
-    func(**d)
+
+print(list(d.values())[1:])

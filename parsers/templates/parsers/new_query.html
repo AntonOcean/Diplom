@@ -3,56 +3,72 @@
 {% block title %}
     Новый запрос
 {% endblock %}
+
+{% block new_query %}active{% endblock %}
+
 {% block content_title %}
-    <h3 id="title" class="text-lg-center">Тематический поиск научных материалов</h3>
+    <div class="col text-center">
+        <h3 id="title">Тематический поиск научных материалов</h3>
+    </div>
 {% endblock %}
+
+
+
 {% block content %}
     {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
-<div id="form_query"><form action="{% url 'new_query' %}" method="POST">
-    {% csrf_token %}
-    <div class="form-group">
-        <label for="exampleInputAuthor">Автор</label>
-        <input type="text" class="form-control" id="exampleInputAuthor" placeholder="Иванов И. И." name="author" value="">
-    </div>
+<div class="col-6 mx-auto" id="form_query">
+    <form action="{% url 'new_query' %}" method="POST">
+        {% csrf_token %}
+        <div class="form-row">
+            <div class="col">
+                <div class="form-group">
+                    <label for="exampleInputAuthor">Автор</label>
+                    <input type="text" class="form-control" id="exampleInputAuthor" placeholder="Иванов И. И." name="author"
+                           aria-describedby="Author" value="">
+                    <small id="Author">Автор только один</small>
+                </div>
 
-    <div class="form-group">
-        <label for="exampleInputTitle">Название статьи</label>
-        <input type="text" class="form-control" id="exampleInputTitle" placeholder="Автоматизированные системы" name="title" value="">
-    </div>
+                <div class="form-group">
+                    <label for="exampleInputTitle">Название статьи</label>
+                    <input type="text" class="form-control" id="exampleInputTitle" placeholder="Автоматизированные системы" name="title"
+                           aria-describedby="Title"
+                           value="">
+                    <small id="Title"></small>
+                </div>
 
-    <div class="form-group">
-        <label for="exampleInputKeyWords">Ключевые слова</label>
-        <input type="text" class="form-control" id="exampleInputKeyWords" placeholder="кибернетика тестирование" name="keywords" value="">
-    </div>
-
-{#    <div class="form-group">#}
-{#        <label for="exampleInputYear1">Год1</label>#}
-{#        <input type="text" class="form-control" id="exampleInputYear1" placeholder="2017" name="year1" value="">#}
-{#    </div>#}
-{##}
-{#    <div class="form-group">#}
-{#        <label for="exampleInputYear2">Год2</label>#}
-{#        <input type="text" class="form-control" id="exampleInputYear2" placeholder="2018" name="year2" value="">#}
-{#    </div>#}
-
-    <div>
-        <label for="exampleInputYear1">Показать статьи, датированные следующим <b>периодом</b>:</label>
-    </div>
-    <div class="form-group">
-        <div style="display: inline;">
-            <input name="year1" value="" id="exampleInputYear1" placeholder="2017" size="4" maxlength="4" pattern="[0-9]*" type="text">
+                <div class="form-group">
+                    <label for="exampleInputKeyWords">Ключевые слова</label>
+                    <input type="text" class="form-control" id="exampleInputKeyWords" placeholder="кибернетика тестирование" name="keywords"
+                           aria-describedby="Keywords"
+                           value="">
+                    <small id="Keywords">Ключевые слова через пробел</small>
+                </div>
+            <div>
+                <label for="exampleInputYear1">Показать статьи, датированные следующим <b>периодом</b>:</label>
+            </div>
+            </div>
         </div>
-        <span style="display: inline;">&nbsp;—&nbsp;</span>
-        <div  style="display: inline;">
-            <input name="year2" value="" id="xampleInputYear2" placeholder="2018" size="4" maxlength="4" pattern="[0-9]*" type="text">
+        <div class="form-row">
+
+                <div class="col-5 col-xs-12">
+                    <div class="form-group">
+                        <input name="year1" class="form-control" value="" id="exampleInputYear1" placeholder="2017" maxlength="4" pattern="[0-9]*" type="text">
+                    </div>
+                </div>
+                <span class="col-2 col-xs-12 text-center"> — </span>
+                <div  class="col-5 col-xs-12">
+                    <div class="form-group">
+                        <input name="year2" class="form-control" value="" id="xampleInputYear2" placeholder="2018" maxlength="4" pattern="[0-9]*" type="text">
+                    </div>
+                </div>
+
         </div>
-    </div>
+        <button type="submit" class="btn btn-lg btn-block btn-primary" >Найти</button>
 
-    <button type="submit" class="btn btn-primary" >Найти</button>
-
-
-</form></div>
+    </form>
+</div>
 {% endblock %}
+
 {% block javascript %}
     <script>
         function loadDoc() {
@@ -66,9 +82,9 @@
             {#xhttp.open("GET", "/load", true);#}
             {#xhttp.send();#}
 
-            console.log('success');
-            $("#title").text ("Загрузка данных....");
-            $("#form_query").html ("<h4>" + "Пожалуйста подождите" + "</h4>")
+            console.log('загружаем');
+            $("#title").text ("Загрузка материалов....");
+            $("#form_query").html ("<div class=\"row justify-content-center\"><img src='{% static 'img/25.gif' %}'></div>")
         }
 
 
@@ -86,7 +102,7 @@
 
 
         {#$(function() {#}
-        {#    $('form').submit(function(e) {#}
+        {#    $('form').submit(function (e) {#}
         {#        var $form = $(this);#}
         {#        var xhr = new window.XMLHttpRequest();#}
         {#        var request = $.ajax({#}
@@ -94,7 +110,7 @@
         {#            url: $form.attr('action'),#}
         {#            beforeSend: loadDoc,#}
         {#            data: $form.serialize(),#}
-        {#            xhr : function(){#}
+        {#            xhr: function () {#}
         {#                return xhr;#}
         {#            }#}
         {#        });#}
@@ -113,13 +129,11 @@
                     url: $form.attr('action'),
                     beforeSend: loadDoc,
                     data: $form.serialize()
-                }).before(function () {
-                    $("#form_query").hide();
                 }).done(function (data) {
                     $("#title").text("Загрузка завершена");
                     $("#form_query").html("<h4>" + data.message + "</h4>");
                     document.location.href = data.url;
-                    console.log('success');
+                    console.log('загрузили');
                 }).fail(function () {
                     console.log('fail');
                 });

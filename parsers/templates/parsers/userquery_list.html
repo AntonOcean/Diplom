@@ -5,33 +5,106 @@
 {% endblock %}
 
 {% block content_title %}
-    Список запросов
+    <div class="col text-center">
+    <h3>Список запросов</h3>
+    </div>
 {% endblock %}
 
+{% block search %}
+    <li class="nav-item ml-2 my-auto">
+        <form action="{% url 'search' %}" class="form-inline my-2 my-lg-0" method="get">
+            <input class="form-control mr-sm-2" type="text" required name="tag" placeholder="Поиск по запросам" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Поиск</button>
+        </form>
+    </li>
+{% endblock %}
+
+{% block query_list %}active{% endblock %}
+
 {% block content %}
-        <nav><ul>
+    <div class="row w-100">
+    <div class="col mx-auto">
+        <div class="card-deck justify-content-center">
         {% for query in userquerys %}
-        <li id = "spisok" class="">
-            <a href="/query_detail/{{ query.timestamp }}">{{ query.timestamp }}</a>
-        </li>
+
+            <div class="card m-2" style="max-width: 18rem;">
+                <div class="card-header">
+                    <p class="card-title">{{ query.get_name }}</p>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">
+                        {% if query.author %}
+                            <span class="pl-3">Автор: {{ query.author }}</span><br>
+                        {% else %}
+                            <span class="pl-3">Автор: --</span><br>
+                        {% endif %}
+                        {% if query.title %}
+                            <span class="pl-3">Заголовок: {{ query.title }}</span><br>
+                            {% else %}
+                            <span class="pl-3">Заголовок: --</span><br>
+                        {% endif %}
+                        {% if query.keywords %}
+                            <span class="pl-3">Ключевые слова: {{ query.keywords }}</span><br>
+                            {% else %}
+                            <span class="pl-3">Ключевые слова: --</span><br>
+                        {% endif %}
+                        {% if query.year1 or query.year2 %}
+                            <span class="pl-3">Период:
+                        {% if query.year1 %}
+                            c {{ query.year1 }}
+                        {% endif %}
+                                {% if query.year2 %}
+                                    по {{ query.year2 }}
+                                {% endif %}
+                            </span><br>
+                            {% else %}
+                                <span class="pl-3">Период: --  </span><br>
+                        {% endif %}
+
+                    </p>
+                </div>
+                <div class="card-footer">
+                    <a href="/query_detail/{{ query.timestamp }}" class="btn btn-primary">Подробнее</a>
+                </div>
+            </div>
+
+
         {% endfor %}
-        </ul></nav>
+        </div>
 
-<div class="pagination">
-    <span class="step-links">
-        {% if page_obj.has_previous %}
-            <a href="?page=1">&laquo; first</a>
-            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
-        {% endif %}
 
-        <span class="focus">
-            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
-        </span>
+    </div>
+    </div>
+    <div class="row mx-auto mt-2">
+        <div class="col">
+            <ul class="pagination">
 
-        {% if page_obj.has_next %}
-            <a href="?page={{ page_obj.next_page_number }}">next</a>
-            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
-        {% endif %}
-    </span>
+                {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page=1">&laquo; first</a>
+                    </li>
+                    <li>
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">previous</a>
+                    </li>
+                {% endif %}
+
+                {% for page in page_obj.paginator.page_range %}
+                    <li class="page-item {% if page == page_obj.number %} active {% endif %}"><a class="page-link" href="?page={{ page }}">{{ page }}</a></li>
+                {% endfor %}
+
+
+                    {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.next_page_number }}">next</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                        </li>
+                    {% endif %}
+
+
+            </ul>
+        </div>
 </div>
+
 {% endblock %}

@@ -1,22 +1,73 @@
 {% extends 'parsers/base.html' %}
 
+
+
 {% block content_title %}
-    {{  object.timestamp }}
+    <div class="col-2">
+        <a href="#" onclick="history.back();" class="btn btn-primary">Назад</a>
+    </div>
+    <div class="col-10">
+        <h3 class="h3 justify-content-center">{{  object.get_date }}</h3>
+    </div>
 {% endblock %}
 
+
 {% block content %}
-{#    <br>#}
-    <h4>Выполненные запросы:</h4>
-    <ol>
-        <li><a href="{{ object.baseurlparser_set.first.url_cyberleninka }}">Cyberleninka</a></li>
-        <li><a href="{{ object.baseurlparser_set.first.url_scholar }}">Scholar</a></li>
-        <li><a href="{{ object.baseurlparser_set.first.url_socio }}">Socio</a></li>
-    </ol>
-    <br>
-    <h4>Загруженные документы:</h4>
-    <ul>
-        {% for doc in object.document_set.all %}
-            <li><a href="{{ doc.net_url }}">{{ doc.title }}</a></li>
-        {% endfor %}
-    </ul>
+    <div class="col-md-3 col-xs-12">
+        <div class="row">
+            <div class="col-xs-12">
+                <h4>Параметры запроса:</h4>
+                    {% if object.author %}
+                        <span class="pl-3">Автор: {{ object.author }}</span><br>
+                    {% endif %}
+                    {% if object.title %}
+                        <span class="pl-3">Заголовок: {{ object.title }}</span><br>
+                    {% endif %}
+                    {% if object.keywords %}
+                        <span class="pl-3">Ключевые слова: {{ object.keywords }}</span><br>
+                    {% endif %}
+                    {% if object.year1 or object.year2 %}
+                        <span class="pl-3">
+                            {% if object.year1 %}
+                                c {{ object.year1 }}
+                            {% endif %}
+                            {% if object.year2 %}
+                                по {{ object.year2 }}
+                            {% endif %}
+                        </span>
+                    {% endif %}
+            </div>
+        </div>
+        <div class="row pt-3">
+            <div class="col-xs-12">
+            <h4>Выполненные запросы:</h4>
+                <ol type="None">
+                    <li class="m-1"><a href="{{ object.baseurlparser_set.first.url_cyberleninka }}" class="btn btn-outline-primary" target="_blank">cyberleninka.ru</a></li>
+                    <li class="m-1"><a href="{{ object.baseurlparser_set.first.url_scholar }}" class="btn btn-outline-primary" target="_blank">scholar.goolge.com</a></li>
+                    <li class="m-1">
+                        <form action="{{ object.baseurlparser_set.first.url_socio }}" method="POST" target="_blank">
+                            <input hidden value="{{ object.keywords_to_socionet }}" name="justtext">
+                            <input hidden value="{{ object.author }}" name="author-name">
+                            <input hidden value="fulltext" name="fulltext">
+                            <input hidden value="{{ object.year1 }}" name="tr1">
+                            <input hidden value="{{ object.year2 }}" name="tr2">
+                            <input hidden value="utf-8" name="accept-charset">
+                            <input type=submit class="btn btn-outline-primary" value="socionet.ru">
+                      </form>
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-9 col-xs-12">
+        <h4>Документов загружено {{ object.document_set.count }}: </h4>
+        {% if not object.document_set.all %}
+            <span class="pl-3">Документов не найдено</span>
+        {% endif %}
+        <ul>
+            {% for doc in object.document_set.all %}
+                <p><li><a href="{{ doc.net_url }}" target="_blank">{{ doc.title }}</a></li></p>
+            {% endfor %}
+        </ul>
+    </div>
 {% endblock %}

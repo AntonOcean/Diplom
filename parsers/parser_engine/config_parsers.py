@@ -9,11 +9,12 @@ def get_timestamp():
     print('Timestamp poluchaemsi is get', timestamp)
     return timestamp
 
+
 timestamp_dir = get_timestamp()
-print('Это тайм стемп в конфиге default', timestamp_dir)
 base_dir = os.path.dirname(os.path.abspath(__file__)) + '/data/' + timestamp_dir + '/' + 'documents'
 path_document_dir = '/'.join(base_dir.split('/')[:3]) + '/'
 path_timestamp_dir = '/'.join(base_dir.split('/')[:2]) + '/'
+
 
 def config():
     global timestamp_dir, base_dir, path_timestamp_dir, path_document_dir

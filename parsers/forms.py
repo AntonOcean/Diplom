@@ -1,6 +1,7 @@
 from django import forms
 import re
 
+
 class NewQueryFrom(forms.Form):
     author = forms.CharField(max_length=255, required=False)
     title = forms.CharField(max_length=255, required=False)
@@ -20,5 +21,3 @@ class NewQueryFrom(forms.Form):
         if re.match(pattern, author):
             return author
         raise forms.ValidationError('Имя автора некорректно')
-
-

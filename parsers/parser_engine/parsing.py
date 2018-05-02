@@ -6,6 +6,7 @@ from parsers.parser_engine.socionet import socionet
 
 import time
 
+
 def parsing(author, title, keywords, year1, year2):
     time_start = time.time()
     p1 = Process(target=cyberleninka, args=(author, title, keywords, year1, year2))

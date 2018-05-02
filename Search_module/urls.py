@@ -21,8 +21,10 @@ from parsers import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('queries_list/', views.QueryListView.as_view(), name='queries_list'),
-    path('login/', views.login, name='login'),
-    path('signup/', views.signup, name='signup'),
+    path('login/', views.LoginFormView.as_view(), name='login'),
+    path('logout/', views.LogoutView.as_view(), name='logout'),
+    path('register/', views.RegisterFormView.as_view(), name='register'),
+    path('search/', views.SearchView.as_view(), name='search'),
     path('query_detail/<slug:slug>/', views.UserQueryDetail.as_view(), name='query_detail'),
     path('', views.new_query, name='new_query'),
 ]

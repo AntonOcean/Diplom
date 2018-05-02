@@ -1,11 +1,9 @@
 import os
-import time
 import json
 
 
 from parsers.parser_engine.parsing import parsing
 import parsers.parser_engine.config_parsers as config
-
 
 
 def write_json(data):

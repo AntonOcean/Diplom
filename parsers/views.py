@@ -1,23 +1,61 @@
-from django.core.paginator import Paginator
-from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponse, HttpResponseRedirect
-from django.http import request, JsonResponse, Http404
-from django.views.decorators.http import require_POST
-from parsers.models import UserQuery, Document, BaseUrlParser
+from django.shortcuts import render, get_object_or_404, render_to_response
+from django.http import HttpResponseRedirect
+from django.http import JsonResponse
+from django.views.generic.base import View
+from parsers.models import UserQuery, Document, BaseUrlParser, Tags
 from parsers.forms import NewQueryFrom
-from time import sleep
-from parsers.forms import NewQueryFrom
-from django.views.generic import ListView, FormView
+from django.views.generic import ListView
 from django.views.generic import DetailView
 from parsers.main import main
 from parsers.parser_engine.set_timestamp import set_timestamp
-#from rest_framework.pagination import CursorPagination
+from django.contrib.auth.forms import UserCreationForm
+from django.views.generic.edit import FormView
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth import login, logout
+
+
+class RegisterFormView(FormView):
+    form_class = UserCreationForm
+    success_url = "/login/"
+    template_name = "parsers/register.html"
+
+    def form_valid(self, form):
+        form.save()
+        return super(RegisterFormView, self).form_valid(form)
+
+
+class LoginFormView(FormView):
+    form_class = AuthenticationForm
+    template_name = "parsers/login.html"
+    success_url = "/"
+
+    def form_valid(self, form):
+        self.user = form.get_user()
+        login(self.request, self.user)
+        return super(LoginFormView, self).form_valid(form)
+
+
+class LogoutView(View):
+    def get(self, request):
+        logout(request)
+        return HttpResponseRedirect("/")
 
 
 class QueryListView(ListView):
     model = UserQuery
     context_object_name = 'userquerys'
-    paginate_by = 5
+    paginate_by = 4
+
+
+class SearchView(QueryListView):
+    def get(self, request, *args, **kwargs):
+        tag_name = request.GET.get('tag')
+        tag = get_object_or_404(Tags, name_tag=tag_name)
+        queries = tag.userquery_set.all()
+        context = {
+            'userquerys': queries,
+        }
+        return render_to_response(template_name='parsers/userquery_list.html', context=context)
 
 
 def new_query(request):
@@ -26,9 +64,14 @@ def new_query(request):
         if form.is_valid():
             set_timestamp()
             result = main(**form.cleaned_data)
+            # result = json.load(open('parsers/parser_engine/data/test_temp.json', 'r', encoding='utf-8'))
             query = UserQuery(**result['UserQuery'])
+            query.user_id = request.user.id
             query.save()
-            print(result)
+            for tag_name in list(result['UserQuery'].values())[1:]:
+                if tag_name:
+                    tag, _ = Tags.objects.get_or_create(name_tag=tag_name)
+                    query.tags.add(tag)
             for doc in result['Document']:
                 doc['user_query_id'] = int(query.id)
                 document = Document(**doc)
@@ -41,12 +84,11 @@ def new_query(request):
                 'url': url,
                 'message': 'ok'
             }
-            return HttpResponseRedirect('/')
-            #return JsonResponse(data)
+            return JsonResponse(data)
         data = {
             'url': '/',
             'message': 'form is not validate'
-        }# отдаем в феил
+        }
         return JsonResponse(data)
     else:
         form = NewQueryFrom()
@@ -54,43 +96,7 @@ def new_query(request):
         'form': form
     })
 
-# def queries_list(request):
-#     userquery_list = UserQuery.objects.all()
-#     paginator = Paginator(userquery_list, 5) # Show 25 contacts per page
-#     page = request.GET.get('page')
-#     userquerys = paginator.get_page(page)
-#     return render(request, 'parsers/queries_list.html', {'userquerys': userquerys})
-
-
-# def test(request):
-#     return render(request, 'parsers/ex.html')
-#
-# def test_ajax(request):
-#     print('Hello', request)
-#     return render(request, "parsers/ajax_info.html", {})
-
-
-
-def login(request):
-    pass
-
-def signup(request):
-    pass
-
-# def load(request):
-#     return render(request, 'parsers/load.html')
-#
-#
-# def query_detail(request, slug):
-#     query = get_object_or_404(UserQuery, slug=slug)
-#     return render(request, 'parsers/query_detail.html', {
-#         'query': query,
-#         'base_urls': query.baseurlparser_set.all().first(),
-#         'documents': query.document_set.all()
-#     })
 
 class UserQueryDetail(DetailView):
     model = UserQuery
     slug_field = 'timestamp'
-
-
