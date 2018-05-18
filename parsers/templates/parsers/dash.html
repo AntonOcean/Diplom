@@ -1,0 +1,60 @@
+{% extends 'parsers/base.html' %}
+
+{% block dash_view %}active{% endblock %}
+
+{% block content_title %}
+    <div class="col text-center">
+        <h3>Статистика</h3>
+    </div>
+{% endblock %}
+
+{% block content %}
+
+    <div class="col-md-9 ml-sm-auto mx-auto col-lg-10">
+        <canvas  id="myChart" width="900" height="380"></canvas>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
+    <script>
+        var ctx = document.getElementById("myChart");
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: [
+                    {% for query in object_list %}
+                        {% if query.document_set.count %}
+                            "{{ query.get_name }}",
+                        {% endif %}
+                    {% endfor %}
+                ],
+                datasets: [{
+                    data: [
+                        {% for query in object_list.reverse %}
+                            {% if query.document_set.count %}
+                                {{ query.document_set.count }},
+                            {% endif %}
+                        {% endfor %}
+                    ],
+                    lineTension: 0,
+                    backgroundColor: 'transparent',
+                    borderColor: '#007bff',
+                    borderWidth: 4,
+                    pointBackgroundColor: '#007bff'
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: false
+                        }
+                    }]
+                },
+                legend: {
+                    display: false,
+                }
+            }
+        });
+    </script>
+
+{% endblock %}

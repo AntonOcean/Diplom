@@ -16,39 +16,39 @@
 
 {% block content %}
     {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
-<div class="col-6 mx-auto" id="form_query">
-    <form action="{% url 'new_query' %}" method="POST">
-        {% csrf_token %}
-        <div class="form-row">
-            <div class="col">
-                <div class="form-group">
-                    <label for="exampleInputAuthor">Автор</label>
-                    <input type="text" class="form-control" id="exampleInputAuthor" placeholder="Иванов И. И." name="author"
-                           aria-describedby="Author" value="">
-                    <small id="Author">Автор только один</small>
-                </div>
+    <div class="col-6 mx-auto" id="form_query">
+        <form action="{% url 'new_query' %}" method="POST">
+            {% csrf_token %}
+            <div class="form-row">
+                <div class="col">
+                    <div class="form-group">
+                        <label for="exampleInputAuthor">Автор</label>
+                        <input type="text" class="form-control" id="exampleInputAuthor" placeholder="Иванов И. И." name="author"
+                               aria-describedby="Author" value="">
+                        <small id="Author">Автор только один</small>
+                    </div>
 
-                <div class="form-group">
-                    <label for="exampleInputTitle">Название статьи</label>
-                    <input type="text" class="form-control" id="exampleInputTitle" placeholder="Автоматизированные системы" name="title"
-                           aria-describedby="Title"
-                           value="">
-                    <small id="Title"></small>
-                </div>
+                    <div class="form-group">
+                        <label for="exampleInputTitle">Название статьи</label>
+                        <input type="text" class="form-control" id="exampleInputTitle" placeholder="Автоматизированные системы" name="title"
+                               aria-describedby="Title"
+                               value="">
+                        <small id="Title"></small>
+                    </div>
 
-                <div class="form-group">
-                    <label for="exampleInputKeyWords">Ключевые слова</label>
-                    <input type="text" class="form-control" id="exampleInputKeyWords" placeholder="кибернетика тестирование" name="keywords"
-                           aria-describedby="Keywords"
-                           value="">
-                    <small id="Keywords">Ключевые слова через пробел</small>
+                    <div class="form-group">
+                        <label for="exampleInputKeyWords">Ключевые слова</label>
+                        <input type="text" class="form-control" id="exampleInputKeyWords" placeholder="кибернетика тестирование" name="keywords"
+                               aria-describedby="Keywords"
+                               value="">
+                        <small id="Keywords">Ключевые слова через пробел</small>
+                    </div>
+                    <div>
+                        <label for="exampleInputYear1">Показать статьи, датированные следующим <b>периодом</b>:</label>
+                    </div>
                 </div>
-            <div>
-                <label for="exampleInputYear1">Показать статьи, датированные следующим <b>периодом</b>:</label>
             </div>
-            </div>
-        </div>
-        <div class="form-row">
+            <div class="form-row">
 
                 <div class="col-5 col-xs-12">
                     <div class="form-group">
@@ -62,64 +62,20 @@
                     </div>
                 </div>
 
-        </div>
-        <button type="submit" class="btn btn-lg btn-block btn-primary" >Найти</button>
+            </div>
+            <button type="submit" class="btn btn-lg btn-block btn-primary" >Найти</button>
 
-    </form>
-</div>
+        </form>
+    </div>
 {% endblock %}
 
 {% block javascript %}
     <script>
         function loadDoc() {
-            {#var xhttp = new XMLHttpRequest();#}
-            {#xhttp.onreadystatechange = function() {#}
-            {#  if (this.readyState === 4 && this.status === 200) {#}
-            {#    document.getElementById("form_query").innerHTML =#}
-            {#    this.responseText;#}
-            {#  }#}
-            {# };#}
-            {#xhttp.open("GET", "/load", true);#}
-            {#xhttp.send();#}
-
             console.log('загружаем');
             $("#title").text ("Загрузка материалов....");
             $("#form_query").html ("<div class=\"row justify-content-center\"><img src='{% static 'img/25.gif' %}'></div>")
         }
-
-
-        {#var xhr = new window.XMLHttpRequest();#}
-        {#var request = $.post({#}
-        {#    type: $form.attr('method'),#}
-        {#    url: $form.attr('action'),#}
-        {#    beforeSend: loadDoc,#}
-        {#    data: $form.serialize(),#}
-        {#    xhr : function(){#}
-        {#        return xhr;#}
-        {#    }#}
-{#        {);#}
-{#        xhr.abort();#}
-
-
-        {#$(function() {#}
-        {#    $('form').submit(function (e) {#}
-        {#        var $form = $(this);#}
-        {#        var xhr = new window.XMLHttpRequest();#}
-        {#        var request = $.ajax({#}
-        {#            type: $form.attr('method'),#}
-        {#            url: $form.attr('action'),#}
-        {#            beforeSend: loadDoc,#}
-        {#            data: $form.serialize(),#}
-        {#            xhr: function () {#}
-        {#                return xhr;#}
-        {#            }#}
-        {#        });#}
-        {#        xhr.abort();#}
-        {#        //отмена действия по умолчанию для кнопки submit#}
-        {#        e.preventDefault();#}
-        {#    })#}
-{#        {);#}
-
 
         $(function() {
             $('form').submit(function (e) {
@@ -141,9 +97,6 @@
                 e.preventDefault();
             })
         });
-
-
-
 
     </script>
 {% endblock %}

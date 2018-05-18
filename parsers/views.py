@@ -1,17 +1,21 @@
 from django.shortcuts import render, get_object_or_404, render_to_response
-from django.http import HttpResponseRedirect
-from django.http import JsonResponse
+from django.http import HttpResponseRedirect, JsonResponse
 from django.views.generic.base import View
-from parsers.models import UserQuery, Document, BaseUrlParser, Tags
-from parsers.forms import NewQueryFrom
-from django.views.generic import ListView
-from django.views.generic import DetailView
-from parsers.main import main
-from parsers.parser_engine.set_timestamp import set_timestamp
+from django.views.generic import ListView, DetailView
 from django.contrib.auth.forms import UserCreationForm
 from django.views.generic.edit import FormView
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login, logout
+
+from parsers.main import main
+from parsers.parser_engine.set_timestamp import set_timestamp
+from parsers.models import UserQuery, Document, BaseUrlParser, Tags
+from parsers.forms import NewQueryFrom
+
+
+class Dash(ListView):
+    model = UserQuery
+    template_name = 'parsers/dash.html'
 
 
 class RegisterFormView(FormView):
@@ -64,7 +68,6 @@ def new_query(request):
         if form.is_valid():
             set_timestamp()
             result = main(**form.cleaned_data)
-            # result = json.load(open('parsers/parser_engine/data/test_temp.json', 'r', encoding='utf-8'))
             query = UserQuery(**result['UserQuery'])
             query.user_id = request.user.id
             query.save()

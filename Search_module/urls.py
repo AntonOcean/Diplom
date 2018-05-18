@@ -27,4 +27,5 @@ urlpatterns = [
     path('search/', views.SearchView.as_view(), name='search'),
     path('query_detail/<slug:slug>/', views.UserQueryDetail.as_view(), name='query_detail'),
     path('', views.new_query, name='new_query'),
+    path('dash/', views.Dash.as_view(), name='dash')
 ]

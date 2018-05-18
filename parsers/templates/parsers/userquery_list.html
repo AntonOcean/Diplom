@@ -6,7 +6,7 @@
 
 {% block content_title %}
     <div class="col text-center">
-    <h3>Список запросов</h3>
+        <h3>Список запросов</h3>
     </div>
 {% endblock %}
 
@@ -23,57 +23,57 @@
 
 {% block content %}
     <div class="row w-100">
-    <div class="col mx-auto">
-        <div class="card-deck justify-content-center">
-        {% for query in userquerys %}
+        <div class="col mx-auto">
+            <div class="card-deck justify-content-center">
+                {% for query in userquerys %}
 
-            <div class="card m-2" style="max-width: 18rem;">
-                <div class="card-header">
-                    <p class="card-title">{{ query.get_name }}</p>
-                </div>
-                <div class="card-body">
-                    <p class="card-text">
-                        {% if query.author %}
-                            <span class="pl-3">Автор: {{ query.author }}</span><br>
-                        {% else %}
-                            <span class="pl-3">Автор: --</span><br>
-                        {% endif %}
-                        {% if query.title %}
-                            <span class="pl-3">Заголовок: {{ query.title }}</span><br>
-                            {% else %}
-                            <span class="pl-3">Заголовок: --</span><br>
-                        {% endif %}
-                        {% if query.keywords %}
-                            <span class="pl-3">Ключевые слова: {{ query.keywords }}</span><br>
-                            {% else %}
-                            <span class="pl-3">Ключевые слова: --</span><br>
-                        {% endif %}
-                        {% if query.year1 or query.year2 %}
-                            <span class="pl-3">Период:
-                        {% if query.year1 %}
-                            c {{ query.year1 }}
-                        {% endif %}
-                                {% if query.year2 %}
-                                    по {{ query.year2 }}
+                    <div class="card m-2" style="max-width: 18rem;">
+                        <div class="card-header">
+                            <p class="card-title">{{ query.get_name }}</p>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">
+                                {% if query.author %}
+                                    <span class="pl-3">Автор: {{ query.author }}</span><br>
+                                {% else %}
+                                    <span class="pl-3">Автор: --</span><br>
                                 {% endif %}
+                                {% if query.title %}
+                                    <span class="pl-3">Заголовок: {{ query.title }}</span><br>
+                                {% else %}
+                                    <span class="pl-3">Заголовок: --</span><br>
+                                {% endif %}
+                                {% if query.keywords %}
+                                    <span class="pl-3">Ключевые слова: {{ query.keywords }}</span><br>
+                                {% else %}
+                                    <span class="pl-3">Ключевые слова: --</span><br>
+                                {% endif %}
+                                {% if query.year1 or query.year2 %}
+                                    <span class="pl-3">Период:
+                                        {% if query.year1 %}
+                                            c {{ query.year1 }}
+                                        {% endif %}
+                                        {% if query.year2 %}
+                                            по {{ query.year2 }}
+                                        {% endif %}
                             </span><br>
-                            {% else %}
-                                <span class="pl-3">Период: --  </span><br>
-                        {% endif %}
+                                {% else %}
+                                    <span class="pl-3">Период: --  </span><br>
+                                {% endif %}
 
-                    </p>
-                </div>
-                <div class="card-footer">
-                    <a href="/query_detail/{{ query.timestamp }}" class="btn btn-primary">Подробнее</a>
-                </div>
+                            </p>
+                        </div>
+                        <div class="card-footer">
+                            <a href="/query_detail/{{ query.timestamp }}" class="btn btn-primary">Подробнее</a>
+                        </div>
+                    </div>
+
+
+                {% endfor %}
             </div>
 
 
-        {% endfor %}
         </div>
-
-
-    </div>
     </div>
     <div class="row mx-auto mt-2">
         <div class="col">
@@ -93,18 +93,18 @@
                 {% endfor %}
 
 
-                    {% if page_obj.has_next %}
-                        <li class="page-item">
-                            <a class="page-link" href="?page={{ page_obj.next_page_number }}">next</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
-                        </li>
-                    {% endif %}
+                {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}">next</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                    </li>
+                {% endif %}
 
 
             </ul>
         </div>
-</div>
+    </div>
 
 {% endblock %}

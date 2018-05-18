@@ -15,9 +15,9 @@ class NewQueryFrom(forms.Form):
         if year2 and year1 and year2 < year1:
             raise forms.ValidationError('Неверно указан год')
 
-    def clean_author(self):
-        author = self.cleaned_data.get('author')
-        pattern = r'^[А-Я][а-я]+ [А-Я]\. [А-Я]\.$'
-        if re.match(pattern, author):
-            return author
-        raise forms.ValidationError('Имя автора некорректно')
+    # def clean_author(self):
+    #     author = self.cleaned_data.get('author')
+    #     pattern = r'^[А-Я][а-я]+ [А-Я]\. [А-Я]\.$'
+    #     if re.match(pattern, author):
+    #         return author
+    #     raise forms.ValidationError('Имя автора некорректно')
