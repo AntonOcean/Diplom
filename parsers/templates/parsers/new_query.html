@@ -72,7 +72,7 @@
 {% block javascript %}
     <script>
         function loadDoc() {
-            console.log('загружаем');
+            {#console.log('загружаем');#}
             $("#title").text ("Загрузка материалов....");
             $("#form_query").html ("<div class=\"row justify-content-center\"><img src='{% static 'img/25.gif' %}'></div>")
         }
@@ -89,9 +89,9 @@
                     $("#title").text("Загрузка завершена");
                     $("#form_query").html("<h4>" + data.message + "</h4>");
                     document.location.href = data.url;
-                    console.log('загрузили');
+                    {#console.log('загрузили');#}
                 }).fail(function () {
-                    console.log('fail');
+                    {#console.log('fail');#}
                 });
                 //отмена действия по умолчанию для кнопки submit
                 e.preventDefault();

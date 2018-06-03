@@ -59,7 +59,8 @@ class SearchView(QueryListView):
         context = {
             'userquerys': queries,
         }
-        return render_to_response(template_name='parsers/userquery_list.html', context=context)
+        # return render_to_response(template_name='parsers/userquery_list.html', context=context)
+        return render(request, 'parsers/userquery_list.html', context)
 
 
 def new_query(request):
